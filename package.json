@@ -1,0 +1,28 @@
+{
+  "name": "carbon-api",
+  "version": "1.0.0",
+  "description": "Create and share beautiful images of your source code.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AffanTheBest/Carbon-API.git"
+  },
+  "keywords": [
+    "carbon",
+    "share",
+    "share"
+  ],
+  "author": "AffanTheBest",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AffanTheBest/Carbon-API/issues"
+  },
+  "homepage": "https://github.com/AffanTheBest/Carbon-API#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "puppeteer": "^8.0.0"
+  }
+}

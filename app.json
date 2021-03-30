@@ -1,0 +1,23 @@
+{
+    "name": "Carbon API {Unofficial}",
+    "description": "Create and share beautiful images of your source code.",
+    "keywords": [
+      "carbon",
+      "source-code",
+      "share",
+      "carbonnowsh"
+    ],
+    "repository": "https://github.com/AffanTheBest/Carbon-API",
+    "website": "https://t.me/AffanTheBest",
+    "scripts": {
+      "worker": "npm start"
+    },
+    "addons": [
+      {
+        "plan": "heroku-postgresql",
+        "options": {
+          "version": "12"
+        }
+      }
+    ]
+  }
