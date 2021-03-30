@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.get('/api', async function (req, res) {
+app.get('/api/', async function (req, res) {
     const text = req.query.text;
     if(text){
         const bg = req.query.bg ? req.query.bg : 'rgba%28171%2C+184%2C+195%2C+1%29';
