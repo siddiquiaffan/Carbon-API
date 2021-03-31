@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer');
+var path = require('path');
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
@@ -35,8 +36,8 @@ app.get('/api/', async function (req, res) {
         await page.goto(`https://carbon.now.sh/?${options}&code=${text}`);
         const element = await page.$('.jsx-2649486367 .page .editor .dnd-container .section #export-container .container')
         try {
-            await element.screenshot({path: `carbon.png`})
-            const img = await __dirname + '/carbon.png';
+            await element.screenshot({path: path.join(__dirname, '/carbon.png')})
+            const img = await path.join(__dirname + '/carbon.png');
             await res.sendFile(img , {title:text})
         } catch(e) {
             let err = {error:"Could not create carbon."}
