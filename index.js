@@ -30,7 +30,7 @@ app.get('/api/', async function (req, res) {
         const options = `bg=${bg}&t=${t}&wt=${wt}&l=${l}&ds=${ds}&dsyoff=${dsyoff}&blur=${blur}&wc=${wc}&wa=${wa}&pv=${pv}&ph=${ph}&ln=${ln}&fl=${fl}&fm=${fm}&fs=${fs}&lh=${lh}&si=${si}&es=${es}&wm=${wm}`
     
         //! Code to get image.
-        const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
+        const browser = await puppeteer.launch({headless: true, args: ['--no-sandbox'] });
         const page = await browser.newPage();
         await page.setViewport({ width: 1920, height: 1080});
         await page.goto(`https://carbon.now.sh/?${options}&code=${text}`);
