@@ -68,7 +68,7 @@ https://carbon.vercel.app/?text=Made+with+❤+in+India+by+Affan
 
   ```bash
   # Clone the repo
-  git clone https://github.com/cyberboysumanjay/Carbon-API
+  git clone https://github.com/AffanTheBest/Carbon-API
   cd Carbon-API
 
   # install npm modules
