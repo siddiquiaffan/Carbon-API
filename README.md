@@ -62,7 +62,7 @@ https://carbon.vercel.app/?text=Made+with+❤+in+India+by+Affan
 #### Deploy Option
 
 * **[Heroku](https://www.heroku.com/) Method** 
-  [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/AffanTheBest/Carbon-API/tree/master)
+  [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/AffanTheBest/Carbon-API/tree/main)
 
 * **Other Method** 
 
