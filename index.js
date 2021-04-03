@@ -3,6 +3,7 @@ var path = require('path');
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
+const fileSystem = require('fs');
 
 app.get('/api/', async function (req, res) {
     const text = req.query.text;
@@ -26,30 +27,40 @@ app.get('/api/', async function (req, res) {
         const si = req.query.si ? req.query.si : 'false';
         const es = req.query.es ? req.query.es : '2x';
         const wm = req.query.wm ? req.query.wm : 'false';
+        const type = req.query.type ? req.query.type : 'png'; 
+        const name = req.query.name ? req.query.name : 'carbon';
     
         const options = `bg=${bg}&t=${t}&wt=${wt}&l=${l}&ds=${ds}&dsyoff=${dsyoff}&blur=${blur}&wc=${wc}&wa=${wa}&pv=${pv}&ph=${ph}&ln=${ln}&fl=${fl}&fm=${fm}&fs=${fs}&lh=${lh}&si=${si}&es=${es}&wm=${wm}`
     
         //! Code to get image.
-        const browser = await puppeteer.launch({headless: true, args: ['--no-sandbox'] });
+        const browser = await puppeteer.launch({headless: true, args: ['--no-sandbox'], ignoreDefaultArgs: ['--disable-extensions']});
         const page = await browser.newPage();
         await page.setViewport({ width: 1920, height: 1080});
         await page.goto(`https://carbon.now.sh/?${options}&code=${text}`);
-        const element = await page.$('.jsx-2649486367 .page .editor .dnd-container .section #export-container .container')
-        try {
-            await element.screenshot({path: path.join(__dirname, '/carbon.png')})
-            const img = await path.join(__dirname + '/carbon.png');
-            await res.sendFile(img , {title:text})
-        } catch(e) {
-            let err = {error:"Could not create carbon."}
-            res.send(JSON.stringify(err))
+        // await page.waitForSelector('.CodeMirror-code', { visible: true, timeout: 60000 })
+        await page.click('#export-menu')
+        await page.type('div.popout > .export-row > input[title=filename]', name)  
+        const imgName = await page.evaluate(el=>el.value , await page.$("div.popout > .export-row > input[title=filename]"))
+        await page.click('#export-'+type)
+
+        try{
+            await page._client.send("Page.setDownloadBehavior", {
+                behavior: "allow",
+                downloadPath: __dirname
+            });
+            await page.waitFor(5000);
+            const imgPath = await __dirname + '/'+imgName+"."+type;
+            await res.sendFile(path.join(imgPath))
+        }catch(e){
+            await res.send("Error")
         }
         await browser.close();
+        await fileSystem.unlinkSync(imgName + "." + type)
         //! Code to get image.
     }else{
         let err = {error:"Please provide valid code/text."}
         res.send(JSON.stringify(err))
     }
-
 })
 
 app.get('/' , (req , res) => { res.redirect('https://affanthebest.github.io/APIs/Carbon')})
