@@ -38,7 +38,7 @@ app.get('/api/', async function (req, res) {
             handleSIGTERM:false,
             handleSIGHUP:false,
             headless:true,
-            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+            args: ['--no-sandbox','--disable-gpu','--disable-setuid-sandbox'],
             ignoreDefaultArgs: ['--disable-extensions']});
         const page = await browser.newPage();
         await page.setViewport({ width: 1920, height: 1080});
@@ -58,7 +58,7 @@ app.get('/api/', async function (req, res) {
             const imgPath = await __dirname + '/'+imgName+"."+type;
             await res.sendFile(path.join(imgPath))
         }catch(e){
-            await res.send("Error")
+            await res.send({"error" : "Can not generate carbon due to" + e})
         }
         await browser.close();
         await fileSystem.unlinkSync(imgName + "." + type)
