@@ -27,6 +27,8 @@ You can use the API by sending a GET or a POST request using these params
 | parameter              | default                    | type    | description                                      |
 | ---------------------- | -------------------------- | ------- | ------------------------------------------------ |
 | `text` (required)      |                            | string  | Code snippet                                     |
+| `name`                 | `carbon`                   | string  | Name of the image                                |
+| `type`                 | `png`                      | string  | type of carbon (PNG or SVG)                      |
 | `bg`                   | `"rgba(171, 184, 195, 1)"` | string  | Hex or rgba color                                |
 | `ds`                   | `true`                     | boolean | Turn on/off shadow                               |
 | `blur`                 | `"68px"`                   | string  | shadow blur radius                               |
