@@ -50,7 +50,7 @@ You can use the API by sending a GET or a POST request using these params
 ### GET `/`
 Params are encoded in url
 ```bash
-https://carbon.vercel.app/?text=Made+with+❤+in+India+by+Affan
+https://unofficialcarbon.herokuapp.com/api?text=Made+with+❤+in+India+by+Affan
 ```
 
 ### RESPONSE
