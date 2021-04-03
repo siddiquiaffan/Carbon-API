@@ -13,16 +13,18 @@
       "worker": "npm start"
     },
     "buildpacks": [
-    {
-      "url": "https://github.com/jontewks/puppeteer-heroku-buildpack.git"
-    },
-  ]
-    "addons": [
       {
-        "plan": "heroku-postgresql",
-        "options": {
-          "version": "12"
-        }
+          "url": "https://github.com/jontewks/puppeteer-heroku-buildpack.git"
+      },
+      {
+          "url": "heroku/nodejs"
       }
-    ]
+  ],
+    "addons": [],
+    "formation": {
+        "web": {
+            "quantity": 1,
+            "size": "free"
+        }
+    }
   }
