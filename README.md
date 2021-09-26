@@ -84,3 +84,4 @@ https://unofficialcarbon.herokuapp.com/api?text=Made+with+❤+in+India+by+Affan
 
 * Copyright (C) 2020 by [Affan](https://github.com/AffanTheBest)
 * Licensed under the terms of the [GNU GPL Version 3](https://github.com/AffanTheBest/Carbon-API/blob/main/LICENSE)
+* Support Group - https://t.me/AsLootChat
