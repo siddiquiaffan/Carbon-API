@@ -4,10 +4,28 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
 const fileSystem = require('fs');
+let browser;
+
+const openBrowser = async () => {
+    if(!browser) {
+        return browser = await puppeteer.launch({
+            defaultViewPort:"none",
+            handleSIGINT:false,
+            handleSIGTERM:false,
+            handleSIGHUP:false,
+            headless:true,
+            args: ['--no-sandbox','--disable-gpu','--disable-setuid-sandbox'],
+            ignoreDefaultArgs: ['--disable-extensions']
+        });
+    }
+    return browser = browser;
+}
 
 app.get('/api/', async function (req, res) {
     const text = req.query.text;
     if(text){
+        // intiate browser
+        await openBrowser();
         const bg = req.query.bg ? req.query.bg : 'rgba%28171%2C+184%2C+195%2C+1%29';
         const t = req.query.t ? req.query.t : 'seti';
         const wt = req.query.wt ? req.query.wt : 'none';
@@ -33,13 +51,6 @@ app.get('/api/', async function (req, res) {
         const options = `bg=${bg}&t=${t}&wt=${wt}&l=${l}&ds=${ds}&dsyoff=${dsyoff}&blur=${blur}&wc=${wc}&wa=${wa}&pv=${pv}&ph=${ph}&ln=${ln}&fl=${fl}&fm=${fm}&fs=${fs}&lh=${lh}&si=${si}&es=${es}&wm=${wm}`
     
         //! Code to get image.
-        const browser = await puppeteer.launch({defaultViewPort:"none",
-            handleSIGINT:false,
-            handleSIGTERM:false,
-            handleSIGHUP:false,
-            headless:true,
-            args: ['--no-sandbox','--disable-gpu','--disable-setuid-sandbox'],
-            ignoreDefaultArgs: ['--disable-extensions']});
         const page = await browser.newPage();
         await page.setViewport({ width: 1920, height: 1080});
         await page.goto(`https://carbon.now.sh/?${options}&code=${text}`);
@@ -60,7 +71,7 @@ app.get('/api/', async function (req, res) {
         }catch(e){
             await res.send({"error" : "Can not generate carbon due to" + e})
         }
-        await browser.close();
+        await page.close();
         await fileSystem.unlinkSync(imgName + "." + type)
         //! Code to get image.
     }else{
