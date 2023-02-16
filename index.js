@@ -13,7 +13,7 @@ const openBrowser = async () => {
             handleSIGINT:false,
             handleSIGTERM:false,
             handleSIGHUP:false,
-            headless:true,
+            headless:false,
             args: ['--no-sandbox','--disable-gpu','--disable-setuid-sandbox'],
             ignoreDefaultArgs: ['--disable-extensions']
         });
@@ -26,7 +26,8 @@ app.get('/api/', async function (req, res) {
     if(text){
         // intiate browser
         await openBrowser();
-        
+        const {ss} = req.query || req.body;
+
         const params = {
             bg      : req.query.bg      || 'rgba%28171%2C+184%2C+195%2C+1%29',
             t       : req.query.t       || 'seti',
@@ -48,7 +49,7 @@ app.get('/api/', async function (req, res) {
             es      : req.query.es      || '2x',
             wm      : req.query.wm      || 'false',
             type    : req.query.type    || 'png',
-            name    : req.query.name    || 'carbon',
+            fileName: req.query.name    || 'carbon',
         }
 
         const options = Object.keys(params)
@@ -60,24 +61,33 @@ app.get('/api/', async function (req, res) {
         await page.setViewport({ width: 1920, height: 1080});
         await page.goto(`https://carbon.now.sh/?${options}&code=${text}`);
         // await page.waitForSelector('.CodeMirror-code', { visible: true, timeout: 60000 })
-        await page.click('#export-menu')
-        await page.type('div.popout > .export-row > input[title=filename]', name)  
-        const imgName = await page.evaluate(el=>el.value , await page.$("div.popout > .export-row > input[title=filename]"))
-        await page.click('#export-'+type)
 
-        try{
-            await page._client.send("Page.setDownloadBehavior", {
-                behavior: "allow",
-                downloadPath: __dirname
-            });
-            await page.waitFor(5000);
-            const imgPath = await __dirname + '/'+imgName+"."+type;
-            await res.sendFile(path.join(imgPath))
-        }catch(e){
-            await res.send({"error" : "Can not generate carbon due to" + e})
+        const imgName = `${params.fileName || 'carbon'}.${ss != 'true' ? params.type : 'png'}`
+
+        if(ss == 'true'){
+            const element = await page.$('#export-container  .container-bg')
+            await element.screenshot({path: imgName})
+        }else {
+            await page.click('#export-menu')
+            await page.type('div.popout > .export-row > input[title=filename]', imgName.slice(-4, 0))  
+            await page.evaluate(el => el.value , await page.$("div.popout > .export-row > input[title=filename]"))
+            await page.click('#export-' + params.type)
+            
+            try{
+                await page._client.send("Page.setDownloadBehavior", {
+                    behavior: "allow",
+                    downloadPath: __dirname
+                });
+                await page.waitFor(5000);
+            }catch(e){
+                res.send({"error" : "Can not generate carbon due to" + e})
+            }
+
         }
+        res.sendFile(path.join(__dirname, imgName))
+
         await page.close();
-        await fileSystem.unlinkSync(imgName + "." + type)
+        fileSystem.unlinkSync(imgName)
         //! Code to get image.
     }else{
         let err = {error:"Please provide valid code/text."}
