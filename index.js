@@ -13,7 +13,7 @@ const openBrowser = async () => {
             handleSIGINT:false,
             handleSIGTERM:false,
             handleSIGHUP:false,
-            headless:false,
+            headless:true,
             args: ['--no-sandbox','--disable-gpu','--disable-setuid-sandbox'],
             ignoreDefaultArgs: ['--disable-extensions']
         });
